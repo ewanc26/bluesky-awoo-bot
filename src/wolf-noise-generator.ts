@@ -13,7 +13,7 @@ function getWolfNoises(): {
   punctuation: { [category: string]: string[] }; // Nested object for category-specific punctuation
 } {
   try {
-    const data = fs.readFileSync("./wolf-noises.json", "utf-8");
+    const data = fs.readFileSync("src/wolf-noises.json", "utf-8");
     return JSON.parse(data);
   } catch (error) {
     console.error("Error reading wolf-noises.json:", error);

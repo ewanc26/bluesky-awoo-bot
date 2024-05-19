@@ -2,10 +2,10 @@ import { BskyAgent } from "@atproto/api";
 import * as dotenv from "dotenv"; // Import dotenv for loading environment variables
 import { CronJob } from "cron"; // Import CronJob for scheduling tasks
 import * as process from "process"; // Import process for accessing environment variables
-import { generateWolfNoiseString } from "./wolf-noise-generator"; // Import the function for generating wolf noise strings
+import { generateWolfNoiseString } from "./wolf-noise-generator";
 
 // Load environment variables from the config.env file
-dotenv.config({ path: "./config.env" });
+dotenv.config({ path: "./src/config.env" });
 
 // Create a Bluesky Agent
 const agent = new BskyAgent({

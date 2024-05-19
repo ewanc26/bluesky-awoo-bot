@@ -23,8 +23,25 @@ function getWolfNoises(): {
 
 export function generateWolfNoiseString(): string {
     const wolfNoises = getWolfNoises(); // Read JSON data
-    const category = getRandomInt(0, Object.keys(wolfNoises).length - 1); // Pick a random category key
-    const randomWords = wolfNoises[Object.keys(wolfNoises)[category]]; // Get words for that category
+    const categoryProbabilities = {
+      howl: 0.4, // 40% chance
+      playful: 0.3, // 30% chance
+      scared: 0.3 // 30% chance
+    };
+  
+    const random = Math.random();
+    let category;
+  
+    // Determine the category based on probabilities
+    if (random < categoryProbabilities.howl) {
+      category = "howl";
+    } else if (random < categoryProbabilities.howl + categoryProbabilities.playful) {
+      category = "playful";
+    } else {
+      category = "scared";
+    }
+  
+    const randomWords = wolfNoises[category]; // Get words for the selected category
   
     let result = "";
     let currentSentenceLength = 0;
@@ -47,6 +64,13 @@ export function generateWolfNoiseString(): string {
         // Break the loop if adding the word would exceed the maximum length
         break;
       }
+    }
+  
+    // Optionally add punctuation based on the selected category
+    if (wolfNoises.punctuation && wolfNoises.punctuation[category] && wolfNoises.punctuation[category].length > 0) {
+      const punctuationLength = wolfNoises.punctuation[category].length;
+      const randomPunctuation = wolfNoises.punctuation[category][getRandomInt(0, punctuationLength - 1)];
+      result += randomPunctuation;
     }
   
     return result.trim(); // Remove any leading/trailing whitespace

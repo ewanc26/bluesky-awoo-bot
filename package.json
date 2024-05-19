@@ -8,5 +8,10 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@atproto/api": "^0.12.10",
+    "cron": "^3.1.7",
+    "dotenv": "^16.4.5"
+  }
 }

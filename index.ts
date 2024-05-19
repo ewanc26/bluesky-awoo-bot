@@ -1,8 +1,8 @@
 import { BskyAgent } from "@atproto/api";
-import * as dotenv from "dotenv"; // Added dotenv import
-import { CronJob } from "cron";
-import * as process from "process";
-import { generateWolfNoiseString } from "./wolf-noise-generator"; // Import the function
+import * as dotenv from "dotenv"; // Import dotenv for loading environment variables
+import { CronJob } from "cron"; // Import CronJob for scheduling tasks
+import * as process from "process"; // Import process for accessing environment variables
+import { generateWolfNoiseString } from "./wolf-noise-generator"; // Import the function for generating wolf noise strings
 
 // Load environment variables from the config.env file
 dotenv.config({ path: "./config.env" });
@@ -12,16 +12,18 @@ const agent = new BskyAgent({
   service: "https://bsky.social",
 });
 
+// Main function for generating and posting wolf noise strings
 async function main() {
   // Check for empty environment variables and abort if needed
   if (!process.env.BLUESKY_USERNAME || !process.env.BLUESKY_PASSWORD) {
     console.error(
       "Missing required environment variables: BLUESKY_USERNAME and BLUESKY_PASSWORD. Aborting script."
     );
-    return; // Exit the function if variables are empty
+    return;
   }
 
   try {
+    // Login to Bluesky
     await agent.login({
       identifier: process.env.BLUESKY_USERNAME!,
       password: process.env.BLUESKY_PASSWORD!,
@@ -33,13 +35,14 @@ async function main() {
       randomNoise = generateWolfNoiseString();
     } while (randomNoise.trim().length === 0); // Loop until a non-empty string is generated
 
+    // Post the generated string to Bluesky
     if (randomNoise) {
       await agent.post({
         text: randomNoise.trim(), // Use the generated string (trimmed)
         langs: ["en-US"],
         createdAt: new Date().toISOString(),
       });
-      console.log("Just posted:", randomNoise.trim());
+      console.log("Just posted:", randomNoise.trim()); // Log the posted string
     } else {
       console.log("Failed to generate a valid wolf noise string after multiple attempts.");
     }
@@ -49,9 +52,10 @@ async function main() {
   }
 }
 
+// Run the main function immediately
 main();
 
-// Function to generate a random delay within 1-3 hours (in seconds)
+// Function to generate a random delay before the next post
 function getRandomDelay() {
   const minHours = 1; // Minimum hours for delay
   const maxHours = 3; // Maximum hours for delay
@@ -68,14 +72,20 @@ function getRandomDelay() {
   return randomDelay;
 }
 
-// Run this on a cron job
+// Schedule a cron job to run the main function periodically
 const scheduleExpression = "0 * * * *"; // Every hour (used as a base for randomization)
 
 const job = new CronJob(scheduleExpression, async () => {
+  // Calculate a random delay before running the main function
   const delay = getRandomDelay();
-  console.log(`Waiting for ${delay / 3600} hours before running main...`);
-  await new Promise((resolve) => setTimeout(resolve, delay * 1000)); // Wait for the random delay
+  console.log(`Next post scheduled in approximately ${(delay / 3600).toFixed(2)} hours.`);
+  
+  // Wait for the random delay
+  await new Promise((resolve) => setTimeout(resolve, delay * 1000));
+  
+  // Run the main function
   main();
 });
 
+// Start the cron job
 job.start();

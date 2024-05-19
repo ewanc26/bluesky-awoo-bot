@@ -20,5 +20,4 @@ build/
 # Testing coverage reports
 coverage/
 
-# Specific file extensions (if needed)
-*.js*
+package-lock.json

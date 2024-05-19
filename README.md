@@ -17,7 +17,7 @@ Bluesky Awoo Bot is a simple script designed to periodically post random wolf no
 1. **Clone the Repository:**
 
    ```sh
-   git clone https://github.com/yourusername/bluesky-awoo-bot.git
+   git clone https://github.com/ewanc26/bluesky-awoo-bot.git
    cd bluesky-awoo-bot
    ```
 

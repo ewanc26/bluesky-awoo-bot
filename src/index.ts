@@ -14,6 +14,8 @@ const agent = new BskyAgent({
 
 // Main function for generating and posting wolf noise strings
 async function main() {
+  console.log("Main function called.");
+
   // Check for empty environment variables and abort if needed
   if (!process.env.BLUESKY_USERNAME || !process.env.BLUESKY_PASSWORD) {
     console.error(
@@ -28,6 +30,7 @@ async function main() {
       identifier: process.env.BLUESKY_USERNAME!,
       password: process.env.BLUESKY_PASSWORD!,
     });
+    console.log("Logged in to Bluesky.");
 
     // Generate a random wolf noise string
     let randomNoise;
@@ -52,9 +55,6 @@ async function main() {
   }
 }
 
-// Run the main function immediately
-main();
-
 // Function to generate a random delay before the next post
 function getRandomDelay() {
   const minHours = 1; // Minimum hours for delay
@@ -76,6 +76,7 @@ function getRandomDelay() {
 const scheduleExpression = "0 * * * *"; // Every hour (used as a base for randomisation)
 
 const job = new CronJob(scheduleExpression, async () => {
+  console.log("Cron job triggered.");
   // Calculate a random delay before running the main function
   const delay = getRandomDelay();
   console.log(`Next post scheduled in approximately ${(delay / 3600).toFixed(2)} hours.`);
@@ -84,8 +85,9 @@ const job = new CronJob(scheduleExpression, async () => {
   await new Promise((resolve) => setTimeout(resolve, delay * 1000));
   
   // Run the main function
-  main();
+  await main(); // Ensure to await the main function
 });
 
 // Start the cron job
+console.log("Starting the cron job.");
 job.start();

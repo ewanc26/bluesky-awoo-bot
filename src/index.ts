@@ -73,7 +73,7 @@ function getRandomDelay() {
 }
 
 // Schedule a cron job to run the main function periodically
-const scheduleExpression = "0 * * * *"; // Every hour (used as a base for randomization)
+const scheduleExpression = "0 * * * *"; // Every hour (used as a base for randomisation)
 
 const job = new CronJob(scheduleExpression, async () => {
   // Calculate a random delay before running the main function

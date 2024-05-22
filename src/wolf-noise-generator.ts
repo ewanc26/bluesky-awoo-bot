@@ -47,15 +47,30 @@ export function generateWolfNoiseString(): string {
   const randomWords = wolfNoises[category]; // Get words for the selected category
 
   let result = "";
+  let currentSentenceLength = 0;
+
+  // Determine whether to generate a shorter post, longer post, or very short post
+  const shorterPostProbability = 0.7; // 70% chance of generating a shorter or very short post
+  const generateShorterOrVeryShortPost = Math.random() < shorterPostProbability;
   let maxLength;
 
-  if (category === "howl") {
-    // For howl, limit to 1 word only
-    maxLength = 10; // Assuming an average word length of 10 characters
+  if (generateShorterOrVeryShortPost) {
+    // Determine whether to generate a very short post (1-5 words) or a shorter post (up to 140 or 280 characters)
+    const veryShortPostProbability = 0.3; // 30% chance of generating a very short post
+    const generateVeryShortPost = Math.random() < veryShortPostProbability;
+
+    if (generateVeryShortPost) {
+      // Generate a very short post (1-5 words)
+      const wordCount = getRandomInt(1, 5);
+      maxLength = wordCount * 10; // Assuming an average word length of 10 characters
+    } else {
+      // Generate a shorter post (up to 140 or 280 characters)
+      maxLength = getRandomInt(70, 140); // For shorter post
+      // maxLength = getRandomInt(140, 280); // For longer post
+    }
   } else {
-    // For other categories, limit to 3-9 words
-    const wordCount = getRandomInt(3, 9);
-    maxLength = wordCount * 10; // Assuming an average word length of 10 characters
+    // Generate a longer post (up to 280 characters)
+    maxLength = 280;
   }
 
   while (result.length < maxLength) {
@@ -69,6 +84,7 @@ export function generateWolfNoiseString(): string {
         result += " ";
       }
       result += randomWord;
+      currentSentenceLength += wordLength;
     } else {
       // Break the loop if adding the word would exceed the maximum length
       break;

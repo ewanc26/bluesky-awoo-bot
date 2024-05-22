@@ -50,7 +50,7 @@ export function generateWolfNoiseString(): string {
   let currentSentenceLength = 0;
 
   // Determine whether to generate a shorter post, longer post, or very short post
-  const shorterPostProbability = 0.7; // 70% chance of generating a shorter or very short post
+  const shorterPostProbability = 0.9; // 90% chance of generating a shorter or very short post
   const generateShorterOrVeryShortPost = Math.random() < shorterPostProbability;
   let maxLength;
 

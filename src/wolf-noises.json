@@ -1,9 +1,9 @@
 {
-  "howl": ["awoo", "awoooooo", "awooooooooooo", "wooof", "roar", "yalp"],
+  "howl": ["awoo", "awoooooo", "awooooooooooo", "wooof", "roar", "yalp", "awroooooo"],
   "playful": ["yip", "yap", "arf", "bark", "prrrt", "ruff"],
   "scared": ["whine", "whimper", "eep", "sniff", "yelp"],
   "punctuation": {
-    "howl": [".", "!", "?", "..."],
+    "howl": ["!", "..."],
     "playful": [".", "?"],
     "scared": [".", "!", "?"]
   }

@@ -98,9 +98,17 @@ export function generateWolfNoiseString(): string {
     wolfNoises.punctuation[category].length > 0
   ) {
     const punctuationLength = wolfNoises.punctuation[category].length;
-    const randomPunctuation =
-      wolfNoises.punctuation[category][getRandomInt(0, punctuationLength - 1)];
-    result += randomPunctuation;
+
+    // Check if there's already punctuation at the end
+    const hasPunctuation = result.length > 0 && /[?!.]$/.test(result);
+
+    if (!hasPunctuation) {
+      const randomPunctuation =
+        wolfNoises.punctuation[category][
+          getRandomInt(0, punctuationLength - 1)
+        ];
+      result += randomPunctuation;
+    }
   }
 
   return result.trim(); // Remove any leading/trailing whitespace

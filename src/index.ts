@@ -67,10 +67,13 @@ function getRandomDelay() {
   const minDelaySeconds = minHours * 60 * 60;
   const maxDelaySeconds = maxHours * 60 * 60;
 
-  // Generate a random number within the desired range (inclusive)
-  const randomDelay =
-    Math.floor(Math.random() * (maxDelaySeconds - minDelaySeconds + 1)) +
-    minDelaySeconds;
+  let randomDelay;
+  do {
+    // Generate a random number within the desired range (inclusive)
+    randomDelay =
+      Math.floor(Math.random() * (maxDelaySeconds - minDelaySeconds + 1)) +
+      minDelaySeconds;
+  } while (randomDelay < minDelaySeconds || randomDelay > maxDelaySeconds);
 
   return randomDelay;
 }
@@ -82,9 +85,19 @@ async function runLoop() {
 
     // Calculate a random delay before the next iteration
     const delay = getRandomDelay();
-    console.log(
-      `Next post scheduled in approximately ${(delay / 3600).toFixed(2)} hours.`
-    );
+
+    // Calculate delay in whole hours and minutes
+    const hours = Math.floor(delay / 3600); // Use 3600 for hours
+    const minutes = Math.floor((delay % 3600) / 60); // Calculate remaining minutes
+
+    // Format the delay string with hours and minutes (no decimals)
+    const formattedDelay = `${
+      hours > 0 ? hours + " hour" + (hours > 1 ? "s" : "") : ""
+    }${hours > 0 && minutes > 0 ? " " : ""}${
+      minutes > 0 ? minutes + " minute" + (minutes > 1 ? "s" : "") : ""
+    }`;
+
+    console.log(`Next post scheduled in approximately ${formattedDelay}.`);
 
     // Wait for the random delay
     await new Promise((resolve) => setTimeout(resolve, delay * 1000));

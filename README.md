@@ -36,6 +36,8 @@ Bluesky Awoo Bot is a simple script designed to periodically post random wolf no
    ```sh
    BLUESKY_USERNAME="your_bluesky_username"
    BLUESKY_PASSWORD="your_bluesky_password"
+   MIN_DELAY_HOURS=1
+   MAX_DELAY_HOURS=3
    ```
 
 2. **Fill in Your Bluesky Credentials:**

@@ -11,6 +11,36 @@ const agent = new BskyAgent({
   service: "https://bsky.social",
 });
 
+// Function to get the maximum delay hours from environment
+function getMaxDelayHours() {
+  return parseInt(process.env.MAX_DELAY_HOURS) || 1; // Default to 1 if not set or invalid
+}
+
+// Function to get the minimum delay hours from environment
+function getMinDelayHours() {
+  return parseInt(process.env.MIN_DELAY_HOURS) || 3; // Default to 3 if not set or invalid
+}
+
+// Function to generate a random delay before the next post
+function getRandomDelay() {
+  const minHours = getMinDelayHours(); // Get minimum delay hours
+  const maxHours = getMaxDelayHours(); // Get maximum delay hours
+
+  // Convert hours to seconds
+  const minDelaySeconds = minHours * 60 * 60;
+  const maxDelaySeconds = maxHours * 60 * 60;
+
+  let randomDelay;
+  do {
+    // Generate a random number within the desired range (inclusive)
+    randomDelay =
+      Math.floor(Math.random() * (maxDelaySeconds - minDelaySeconds + 1)) +
+      minDelaySeconds;
+  } while (randomDelay < minDelaySeconds || randomDelay > maxDelaySeconds);
+
+  return randomDelay;
+}
+
 // Main function for generating and posting wolf noise strings
 async function main() {
   console.log("Main function called.");
@@ -56,26 +86,6 @@ async function main() {
     console.error("Error during posting:", error);
     // You can optionally implement retry logic or notify someone here
   }
-}
-
-// Function to generate a random delay before the next post
-function getRandomDelay() {
-  const minHours = 1; // Minimum hours for delay
-  const maxHours = 3; // Maximum hours for delay
-
-  // Convert hours to seconds
-  const minDelaySeconds = minHours * 60 * 60;
-  const maxDelaySeconds = maxHours * 60 * 60;
-
-  let randomDelay;
-  do {
-    // Generate a random number within the desired range (inclusive)
-    randomDelay =
-      Math.floor(Math.random() * (maxDelaySeconds - minDelaySeconds + 1)) +
-      minDelaySeconds;
-  } while (randomDelay < minDelaySeconds || randomDelay > maxDelaySeconds);
-
-  return randomDelay;
 }
 
 // Function to run the main function in a loop with random delays

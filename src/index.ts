@@ -48,9 +48,9 @@ async function main() {
   // Check for empty environment variables and abort if needed
   if (!process.env.BLUESKY_USERNAME || !process.env.BLUESKY_PASSWORD) {
     console.error(
-      "Missing required environment variables: BLUESKY_USERNAME and BLUESKY_PASSWORD. Aborting script."
+      "Missing required environment variables: BLUESKY_USERNAME and BLUESKY_PASSWORD.\nAborting script."
     );
-    return;
+    process.exit(1);
   }
 
   console.log("Environment variables loaded successfully.");

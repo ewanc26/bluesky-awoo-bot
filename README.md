@@ -60,7 +60,7 @@ Contributions are welcome! Please fork the repository and submit a pull request 
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+This project is licensed under the MIT License. Please take a look at the [LICENSE](LICENSE) file for more details.
 
 ## Project Structure
 
@@ -81,7 +81,7 @@ bluesky-awoo-bot/
 
 ### `src/config.env`
 
-This file stores the Bluesky credentials required to log in and post. Ensure you keep this file secure and do not share it publicly.
+This file stores the Bluesky credentials required to log in and post. Please make sure you keep this file secure and do not share it publicly.
 
 ### `src/index.ts`
 

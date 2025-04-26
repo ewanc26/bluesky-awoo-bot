@@ -2,7 +2,7 @@
 
 [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
-***This repository is available on [GitHub](https://github.com/ewanc26/bluesky-awoo-bot) and [Tangled](https://tangled.sh/@ewancroft.uk/bluesky-awoo-bot). GitHub is the primary version, and the Tangled version is a mirror.***
+***This repository is available on [GitHub](https://github.com/ewanc26/bluesky-awoo-bot) and [Tangled](https://tangled.sh/did:plc:ofrbh253gwicbkc5nktqepol/bluesky-awoo-bot). GitHub is the primary version, and the Tangled version is a mirror.***
 
 Bluesky Awoo Bot is a simple script designed to periodically post random wolf noises on Bluesky. The bot uses a JSON file of predefined wolf noises, selects a random noise, and posts it on Bluesky at random intervals.
 

@@ -13,12 +13,12 @@ const agent = new BskyAgent({
 
 // Function to get the maximum delay hours from environment
 function getMaxDelayHours() {
-  return parseInt(process.env.MAX_DELAY_HOURS) || 1; // Default to 1 if not set or invalid
+  return parseInt(process.env.MAX_DELAY_HOURS) || 6; // Default to 6 if not set or invalid
 }
 
 // Function to get the minimum delay hours from environment
 function getMinDelayHours() {
-  return parseInt(process.env.MIN_DELAY_HOURS) || 3; // Default to 3 if not set or invalid
+  return parseInt(process.env.MIN_DELAY_HOURS) || 1; // Default to 1 if not set or invalid
 }
 
 // Function to generate a random delay before the next post

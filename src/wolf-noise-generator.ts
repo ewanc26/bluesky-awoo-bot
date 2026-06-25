@@ -1,38 +1,48 @@
-import * as fs from "fs"; // File system module
+// ── Module Header ────────────────────────────────────────
+// Wolf noise generator — builds random strings from a
+// categorized word list for posting to Bluesky.
 
-// Function to getRandomInt
+import * as fs from "fs";
+
+// Uniform random integer in [min, max], inclusive
 function getRandomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// Function to read the JSON data
+// Load the word lists from the JSON data file
 function getWolfNoises(): {
   howl: string[];
   playful: string[];
   scared: string[];
-  punctuation: { [category: string]: string[] }; // Nested object for category-specific punctuation
+  punctuation: { [category: string]: string[] };
 } {
   try {
     const data = fs.readFileSync("src/wolf-noises.json", "utf-8");
     return JSON.parse(data);
   } catch (error) {
     console.error("Error reading wolf-noises.json:", error);
-    throw error; // Re-throw the error for handling
+    throw error;
   }
 }
 
+// ── Generator ────────────────────────────────────────────
+
+/**
+ * Build a random wolf-noise string from the categorized word list.
+ * Biased toward shorter posts (70-140 chars) with occasional very short
+ * (1-5 words) or full-length (280 chars) variants.
+ */
 export function generateWolfNoiseString(): string {
-  const wolfNoises = getWolfNoises(); // Read JSON data
+  const wolfNoises = getWolfNoises();
   const categoryProbabilities = {
-    howl: 0.4, // 40% chance
-    playful: 0.3, // 30% chance
-    scared: 0.3, // 30% chance
+    howl: 0.4,
+    playful: 0.3,
+    scared: 0.3,
   };
 
+  // Pick a category weighted by probability
   const random = Math.random();
   let category;
-
-  // Determine the category based on probabilities
   if (random < categoryProbabilities.howl) {
     category = "howl";
   } else if (
@@ -44,62 +54,51 @@ export function generateWolfNoiseString(): string {
     category = "scared";
   }
 
-  const randomWords = wolfNoises[category]; // Get words for the selected category
-
+  const randomWords = wolfNoises[category];
   let result = "";
-  let currentSentenceLength = 0;
 
-  // Determine whether to generate a shorter post, longer post, or very short post
-  const shorterPostProbability = 0.9; // 90% chance of generating a shorter or very short post
+  // Decide post length: 90% short/very-short, 10% full-length
+  const shorterPostProbability = 0.9;
   const generateShorterOrVeryShortPost = Math.random() < shorterPostProbability;
   let maxLength;
 
   if (generateShorterOrVeryShortPost) {
-    // Determine whether to generate a very short post (1-5 words) or a shorter post (up to 140 or 280 characters)
-    const veryShortPostProbability = 0.3; // 30% chance of generating a very short post
+    // Of the short posts, 30% are very short (1-5 words), 70% are moderate (70-140 chars)
+    const veryShortPostProbability = 0.3;
     const generateVeryShortPost = Math.random() < veryShortPostProbability;
 
     if (generateVeryShortPost) {
-      // Generate a very short post (1-5 words)
       const wordCount = getRandomInt(1, 5);
-      maxLength = wordCount * 10; // Assuming an average word length of 10 characters
+      maxLength = wordCount * 10;
     } else {
-      // Generate a shorter post (up to 140 or 280 characters)
-      maxLength = getRandomInt(70, 140); // For shorter post
-      // maxLength = getRandomInt(140, 280); // For longer post
+      maxLength = getRandomInt(70, 140);
     }
   } else {
-    // Generate a longer post (up to 280 characters)
     maxLength = 280;
   }
 
+  // Build the string word by word until we hit the length cap
   while (result.length < maxLength) {
     const randomWord = randomWords[getRandomInt(0, randomWords.length - 1)];
     const wordLength = randomWord.length;
 
-    // Check if adding the word exceeds the maximum length
     if (result.length + wordLength <= maxLength) {
-      // Add a space if it's not the first word and result is not empty
       if (result.length > 0) {
         result += " ";
       }
       result += randomWord;
-      currentSentenceLength += wordLength;
     } else {
-      // Break the loop if adding the word would exceed the maximum length
       break;
     }
   }
 
-  // Optionally add punctuation based on the selected category
+  // Append category-appropriate punctuation, unless the string already ends with some
   if (
     wolfNoises.punctuation &&
     wolfNoises.punctuation[category] &&
     wolfNoises.punctuation[category].length > 0
   ) {
     const punctuationLength = wolfNoises.punctuation[category].length;
-
-    // Check if there's already punctuation at the end
     const hasPunctuation = result.length > 0 && /[?!.]$/.test(result);
 
     if (!hasPunctuation) {
@@ -111,5 +110,5 @@ export function generateWolfNoiseString(): string {
     }
   }
 
-  return result.trim(); // Remove any leading/trailing whitespace
+  return result.trim();
 }

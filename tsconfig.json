@@ -1,6 +1,6 @@
 {
+    // Minimal config — CLI tools like ts-node handle the rest
     "compilerOptions": {
-      "module": "commonjs"  // Or "amd" if applicable
+      "module": "commonjs"
     }
   }
-  

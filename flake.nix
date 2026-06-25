@@ -1,3 +1,7 @@
+# bluesky-awoo-bot: Nix dev shell
+# Provides Node.js 22 and pnpm for local development.
+# Uses nixfmt for formatting — run via `nix fmt`.
+
 {
   description = "bluesky-awoo-bot — awoo counter for Bluesky";
 
@@ -21,6 +25,7 @@
         }
       );
 
+      # Keep project formatting consistent via nixfmt
       formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
     };
 }

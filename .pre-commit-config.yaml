@@ -1,3 +1,4 @@
+# Runs prettier on staged JS/TS/JSON/YAML/MD/CSS files before every commit
 repos:
   - repo: local
     hooks:

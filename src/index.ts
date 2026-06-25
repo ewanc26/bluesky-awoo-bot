@@ -1,38 +1,42 @@
+// ── Module Header ────────────────────────────────────────
+// Bluesky Awoo Bot — posts randomly-generated wolf noises
+// on a schedule through the AT Protocol.
+
 import { BskyAgent } from "@atproto/api";
-import * as dotenv from "dotenv"; // Import dotenv for loading environment variables
-import * as process from "process"; // Import process for accessing environment variables
+import * as dotenv from "dotenv";
 import { generateWolfNoiseString } from "./wolf-noise-generator";
 
-// Load environment variables from the config.env file
+// Load creds and config from a local env file, never checked in
 dotenv.config({ path: "./src/config.env" });
 
-// Create a Bluesky Agent
+// ── Configuration ────────────────────────────────────────
+
 const agent = new BskyAgent({
   service: "https://bsky.social",
 });
 
-// Function to get the maximum delay hours from environment
+// Pull delay range from env, fall back to sensible defaults
 function getMaxDelayHours() {
-  return parseInt(process.env.MAX_DELAY_HOURS) || 6; // Default to 6 if not set or invalid
+  return parseInt(process.env.MAX_DELAY_HOURS) || 6;
 }
 
-// Function to get the minimum delay hours from environment
 function getMinDelayHours() {
-  return parseInt(process.env.MIN_DELAY_HOURS) || 1; // Default to 1 if not set or invalid
+  return parseInt(process.env.MIN_DELAY_HOURS) || 1;
 }
 
-// Function to generate a random delay before the next post
-function getRandomDelay() {
-  const minHours = getMinDelayHours(); // Get minimum delay hours
-  const maxHours = getMaxDelayHours(); // Get maximum delay hours
+// ── Scheduling ───────────────────────────────────────────
 
-  // Convert hours to seconds
+// Pick a random delay between min and max hours — keeps posting
+// unpredictable without being totally irregular
+function getRandomDelay() {
+  const minHours = getMinDelayHours();
+  const maxHours = getMaxDelayHours();
+
   const minDelaySeconds = minHours * 60 * 60;
   const maxDelaySeconds = maxHours * 60 * 60;
 
   let randomDelay;
   do {
-    // Generate a random number within the desired range (inclusive)
     randomDelay =
       Math.floor(Math.random() * (maxDelaySeconds - minDelaySeconds + 1)) +
       minDelaySeconds;
@@ -41,11 +45,13 @@ function getRandomDelay() {
   return randomDelay;
 }
 
-// Main function for generating and posting wolf noise strings
+// ── Posting ──────────────────────────────────────────────
+
+// Generate and post a single wolf noise to Bluesky
 async function main() {
   console.log("Main function called.");
 
-  // Check for empty environment variables and abort if needed
+  // Security: abort early if credentials aren't configured
   if (!process.env.BLUESKY_USERNAME || !process.env.BLUESKY_PASSWORD) {
     console.error(
       "Missing required environment variables: BLUESKY_USERNAME and BLUESKY_PASSWORD.\nAborting script."
@@ -56,27 +62,25 @@ async function main() {
   console.log("Environment variables loaded successfully.");
 
   try {
-    // Login to Bluesky
     await agent.login({
       identifier: process.env.BLUESKY_USERNAME!,
       password: process.env.BLUESKY_PASSWORD!,
     });
     console.log("Logged in to Bluesky.");
 
-    // Generate a random wolf noise string
+    // Keep generating until we get something non-empty
     let randomNoise;
     do {
       randomNoise = generateWolfNoiseString();
-    } while (randomNoise.trim().length === 0); // Loop until a non-empty string is generated
+    } while (randomNoise.trim().length === 0);
 
-    // Post the generated string to Bluesky
     if (randomNoise) {
       await agent.post({
-        text: randomNoise.trim(), // Use the generated string (trimmed)
+        text: randomNoise.trim(),
         langs: ["en-US"],
         createdAt: new Date().toISOString(),
       });
-      console.log("Just posted:", randomNoise.trim()); // Log the posted string
+      console.log("Just posted:", randomNoise.trim());
     } else {
       console.log(
         "Failed to generate a valid wolf noise string after multiple attempts."
@@ -84,23 +88,22 @@ async function main() {
     }
   } catch (error) {
     console.error("Error during posting:", error);
-    // You can optionally implement retry logic or notify someone here
   }
 }
 
-// Function to run the main function in a loop with random delays
+// ── Loop ─────────────────────────────────────────────────
+
+// Post on a loop, then wait a random interval before the next post
 async function runLoop() {
   while (true) {
     await main();
 
-    // Calculate a random delay before the next iteration
     const delay = getRandomDelay();
 
-    // Calculate delay in whole hours and minutes
-    const hours = Math.floor(delay / 3600); // Use 3600 for hours
-    const minutes = Math.floor((delay % 3600) / 60); // Calculate remaining minutes
+    // Format the delay into hours/minutes for the log message
+    const hours = Math.floor(delay / 3600);
+    const minutes = Math.floor((delay % 3600) / 60);
 
-    // Format the delay string with hours and minutes (no decimals)
     const formattedDelay = `${
       hours > 0 ? hours + " hour" + (hours > 1 ? "s" : "") : ""
     }${hours > 0 && minutes > 0 ? " " : ""}${
@@ -109,7 +112,7 @@ async function runLoop() {
 
     console.log(`Next post scheduled in approximately ${formattedDelay}.`);
 
-    // Wait for the random delay
+    // setTimeout takes ms, delay is in seconds
     await new Promise((resolve) => setTimeout(resolve, delay * 1000));
   }
 }

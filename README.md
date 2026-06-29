@@ -2,101 +2,47 @@
 
 [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
-Bluesky Awoo Bot is a simple script designed to periodically post random wolf noises on Bluesky. The bot uses a JSON file of predefined wolf noises, selects a random noise, and posts it on Bluesky at random intervals.
+Posts random wolf noises to Bluesky at random intervals.
 
-> 🧶 Also available on [Tangled](https://tangled.org/ewancroft.uk/bluesky-awoo-bot)
+> Also available on [Tangled](https://tangled.org/ewancroft.uk/bluesky-awoo-bot)
 
-## Table of Contents
+## Install
 
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Installation
-
-1. **Clone the Repository:**
-
-   ```sh
-   git clone https://github.com/ewanc26/bluesky-awoo-bot.git
-   cd bluesky-awoo-bot
-   ```
-
-2. **Install Dependencies:**
-
-   ```sh
-   npm install
-   ```
-
-## Configuration
-
-1. **Create a Configuration File:**
-
-   Create a file named `config.env` in the `src` directory with the following contents:
-
-   ```sh
-   BLUESKY_USERNAME="your_bluesky_username"
-   BLUESKY_PASSWORD="your_bluesky_password"
-   MIN_DELAY_HOURS=1
-   MAX_DELAY_HOURS=3
-   ```
-
-2. **Fill in Your Bluesky Credentials:**
-
-   Replace `your_bluesky_username` and `your_bluesky_password` with your actual Bluesky account credentials.
-
-## Usage
-
-1. **Run the Bot:**
-
-   ```sh
-   npx ts-node src/index.ts
-   ```
-
-   This command will start the bot, which will post a wolf noise immediately and then schedule subsequent posts at random intervals.
-
-## Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request with your changes. Ensure that your code follows the existing style and includes appropriate tests.
-
-## License
-
-This project is licensed under the MIT License. Please take a look at the [LICENSE](LICENSE) file for more details.
-
-## ☕ Support
-
-If you found this useful, consider [buying me a ko-fi](https://ko-fi.com/ewancroft)!
-
-## Project Structure
-
-```plaintext
-bluesky-awoo-bot/
-│
-├── src/
-│   ├── config.env                # Environment configuration file
-│   ├── index.ts                  # Main script for the bot
-│   ├── wolf-noise-generator.ts   # Module for generating random wolf noises
-│   └── wolf-noises.json          # JSON file containing predefined wolf noises
-│
-├── package.json                  # Node.js project metadata and dependencies
-└── README.md                     # This README file
+```bash
+git clone https://github.com/ewanc26/bluesky-awoo-bot.git
+cd bluesky-awoo-bot
+npm install
 ```
 
-## Explanation of Files
+## Config
 
-### `src/config.env`
+Create `src/config.env`:
 
-This file stores the Bluesky credentials required to log in and post. Please make sure you keep this file secure and do not share it publicly.
+```sh
+BLUESKY_USERNAME="your_bluesky_username"
+BLUESKY_PASSWORD="your_bluesky_password"
+MIN_DELAY_HOURS=1
+MAX_DELAY_HOURS=3
+```
 
-### `src/index.ts`
+## Run
 
-This is the main script that handles the bot's functionality. It logs into Bluesky, generates a random wolf noise, and posts it. It also schedules future posts at random intervals.
+```bash
+npx ts-node src/index.ts
+```
 
-### `src/wolf-noise-generator.ts`
+Posts immediately, then schedules the next one at a random interval.
 
-This module contains the logic for generating random wolf noises based on predefined categories and probabilities.
+## Project layout
 
-### `src/wolf-noises.json`
+```
+src/
+├── config.env              # Config
+├── index.ts                # Main script
+├── wolf-noise-generator.ts # Picks random wolf noises from categories
+└── wolf-noises.json        # Predefined howls, playful sounds, scared noises
+```
 
-This JSON file includes the predefined wolf noises categorized into different types (howl, playful, scared) and associated punctuation.
+## Licence
+
+MIT

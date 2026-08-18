@@ -10,7 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@atproto/api": "^0.12.13",
+    "@bsky/sdk": "latest",
+    "@atproto/lex": "^0.1.4",
+    "@atproto/lex-password-session": "latest",
     "cron": "^3.1.7",
     "dotenv": "^16.4.5"
   },

@@ -2,18 +2,25 @@
 // Bluesky Awoo Bot — posts randomly-generated wolf noises
 // on a schedule through the AT Protocol.
 
-import { BskyAgent } from "@atproto/api";
+import { Client } from "@atproto/lex";
+import { PasswordSession } from "@atproto/lex-password-session";
+import { api, post } from "@bsky/sdk";
 import * as dotenv from "dotenv";
 import { generateWolfNoiseString } from "./wolf-noise-generator";
 
-// Load creds and config from a local env file, never checked in
 dotenv.config({ path: "./src/config.env" });
 
-// ── Configuration ────────────────────────────────────────
+let client: Client;
 
-const agent = new BskyAgent({
-  service: "https://bsky.social",
-});
+async function login() {
+  const session = await PasswordSession.login({
+    service: "https://bsky.social",
+    identifier: process.env.BLUESKY_USERNAME!,
+    password: process.env.BLUESKY_PASSWORD!,
+  });
+  client = new Client(session, { service: api.app.service });
+  console.log("Logged in to Bluesky.");
+}
 
 // Pull delay range from env, fall back to sensible defaults
 function getMaxDelayHours() {
@@ -54,7 +61,7 @@ async function main() {
   // Security: abort early if credentials aren't configured
   if (!process.env.BLUESKY_USERNAME || !process.env.BLUESKY_PASSWORD) {
     console.error(
-      "Missing required environment variables: BLUESKY_USERNAME and BLUESKY_PASSWORD.\nAborting script."
+      "Missing required environment variables: BLUESKY_USERNAME and BLUESKY_PASSWORD.\nAborting script.",
     );
     process.exit(1);
   }
@@ -62,11 +69,7 @@ async function main() {
   console.log("Environment variables loaded successfully.");
 
   try {
-    await agent.login({
-      identifier: process.env.BLUESKY_USERNAME!,
-      password: process.env.BLUESKY_PASSWORD!,
-    });
-    console.log("Logged in to Bluesky.");
+    await login();
 
     // Keep generating until we get something non-empty
     let randomNoise;
@@ -75,15 +78,13 @@ async function main() {
     } while (randomNoise.trim().length === 0);
 
     if (randomNoise) {
-      await agent.post({
+      await client.call(post, {
         text: randomNoise.trim(),
-        langs: ["en-US"],
-        createdAt: new Date().toISOString(),
       });
       console.log("Just posted:", randomNoise.trim());
     } else {
       console.log(
-        "Failed to generate a valid wolf noise string after multiple attempts."
+        "Failed to generate a valid wolf noise string after multiple attempts.",
       );
     }
   } catch (error) {

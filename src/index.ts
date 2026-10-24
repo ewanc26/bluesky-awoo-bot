@@ -4,9 +4,9 @@
 
 import { Client } from "@atproto/lex";
 import { PasswordSession } from "@atproto/lex-password-session";
-import { api, post } from "@bsky/sdk";
+import { post } from "@bsky/sdk";
 import * as dotenv from "dotenv";
-import { generateWolfNoiseString } from "./wolf-noise-generator";
+import { generateWolfNoiseString } from "./wolf-noise-generator.js";
 
 dotenv.config({ path: "./src/config.env" });
 
@@ -18,7 +18,7 @@ async function login() {
     identifier: process.env.BLUESKY_USERNAME!,
     password: process.env.BLUESKY_PASSWORD!,
   });
-  client = new Client(session, { service: api.app.service });
+  client = new Client(session);
   console.log("Logged in to Bluesky.");
 }
 

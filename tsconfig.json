@@ -1,6 +1,9 @@
 {
-    // Minimal config — CLI tools like ts-node handle the rest
-    "compilerOptions": {
-      "module": "commonjs"
-    }
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "es2022",
+    "skipLibCheck": true,
+    "noEmit": true
   }
+}

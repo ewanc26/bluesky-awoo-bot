@@ -28,7 +28,7 @@ MAX_DELAY_HOURS=3
 ## Run
 
 ```bash
-npx ts-node src/index.ts
+npm start
 ```
 
 Posts immediately, then schedules the next one at a random interval.

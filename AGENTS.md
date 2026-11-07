@@ -20,4 +20,4 @@ A simple script designed to periodically post random wolf noises on Bluesky.
 
 ## Recent history
 
-Sync AGENTS.md from zincfox; Sync AGENTS.md from zincfox; Sync AGENTS.md from zincfox; Sync CONTRIBUTING.md from zincfox; Sync CONTRIBUTING.md from zincfox
+Align AT Protocol SDKs and make installs reproducible (#3); Merge branch 'main' of github.com:ewanc26/bluesky-awoo-bot into add-sponsor-links; docs: tailor contributor and agent guidance (#1); Update config.yml issue template; Update documentation.yml issue template; Update feature_request.yml issue template; Update bug_report.yml issue template

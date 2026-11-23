@@ -9,7 +9,7 @@
     "test": "npm run typecheck"
   },
   "keywords": [],
-  "author": "",
+  "author": "Ewan Croft (ewanc26)",
   "license": "ISC",
   "dependencies": {
     "@atproto/lex": "^0.3.14",

@@ -8,7 +8,7 @@ import { post } from "@bsky/sdk";
 import * as dotenv from "dotenv";
 import { generateWolfNoiseString } from "./wolf-noise-generator.js";
 
-dotenv.config({ path: "./src/config.env" });
+dotenv.config({ path: "./src/config.env", quiet: true });
 
 let client: Client;
 
@@ -24,11 +24,11 @@ async function login() {
 
 // Pull delay range from env, fall back to sensible defaults
 function getMaxDelayHours() {
-  return parseInt(process.env.MAX_DELAY_HOURS) || 6;
+  return parseInt(process.env.MAX_DELAY_HOURS ?? "") || 6;
 }
 
 function getMinDelayHours() {
-  return parseInt(process.env.MIN_DELAY_HOURS) || 1;
+  return parseInt(process.env.MIN_DELAY_HOURS ?? "") || 1;
 }
 
 // ── Scheduling ───────────────────────────────────────────

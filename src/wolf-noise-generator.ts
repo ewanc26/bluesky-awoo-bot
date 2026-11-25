@@ -42,7 +42,7 @@ export function generateWolfNoiseString(): string {
 
   // Pick a category weighted by probability
   const random = Math.random();
-  let category;
+  let category: keyof typeof categoryProbabilities;
   if (random < categoryProbabilities.howl) {
     category = "howl";
   } else if (
